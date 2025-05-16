@@ -2,6 +2,7 @@ package com.edstem.pagination_sorting.controller;
 
 import com.edstem.pagination_sorting.dto.PageableResponse;
 import com.edstem.pagination_sorting.dto.ProductDTO;
+import com.edstem.pagination_sorting.dto.SliceResponse;
 import com.edstem.pagination_sorting.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,11 +35,17 @@ public class ProductController {
 	}
 
 	@GetMapping("/slice")
-	public ResponseEntity<Slice<ProductDTO>> getProductSlice(
+	public ResponseEntity<SliceResponse<ProductDTO>> getProductSlice(
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size
 	) {
-		return ResponseEntity.ok(productService.getProductSlice(page, size));
+		Slice<ProductDTO> slice = productService.getProductSlice(page, size);
+		SliceResponse<ProductDTO> response = SliceResponse.<ProductDTO>builder()
+				.content(slice.getContent())
+				.hasNext(slice.hasNext())
+				.build();
+
+		return ResponseEntity.ok(response);
 	}
 
 
