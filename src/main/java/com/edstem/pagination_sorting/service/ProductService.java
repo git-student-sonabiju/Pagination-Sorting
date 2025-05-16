@@ -6,10 +6,7 @@ import com.edstem.pagination_sorting.model.Product;
 import com.edstem.pagination_sorting.repository.ProductRepository;
 import com.edstem.pagination_sorting.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +37,27 @@ public class ProductService {
 				productPage.getTotalPages(),
 				productPage.isLast()
 		);
+	}
+
+	public Slice<ProductDTO> getProductSlice(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		Slice<Product> slice = productRepository.findAllBy(pageable);
+		return slice.map(this::toDTO);
+	}
+
+	public List<ProductDTO> getAllProducts() {
+		return productRepository.findAll().stream().map(this::toDTO).toList();
+	}
+
+	public Page<ProductDTO> getWrappedProducts(int page, int size) {
+		List<Product> subset = productRepository.findAll()
+				.stream()
+				.skip((long) page * size)
+				.limit(size)
+				.toList();
+		List<ProductDTO> dtos = subset.stream().map(this::toDTO).toList();
+
+		return new PageImpl<>(dtos, PageRequest.of(page, size), productRepository.count());
 	}
 
 	private ProductDTO toDTO(Product product) {

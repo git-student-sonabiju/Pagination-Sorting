@@ -5,17 +5,17 @@ meta {
 }
 
 get {
-  url: http://localhost:8080/api/products?page=1&size=20&sortBy=price&direction=desc&category=Category 5&minPrice=20&maxPrice=80
+  url: http://localhost:8080/api/products?page=0&size=5&sortBy=price&direction=asc&category=Category 1&minPrice=20&maxPrice=80
   body: none
   auth: inherit
 }
 
 params:query {
-  page: 1
-  size: 20
+  page: 0
+  size: 5
   sortBy: price
-  direction: desc
-  category: Category 5
+  direction: asc
+  category: Category 1
   minPrice: 20
   maxPrice: 80
 }

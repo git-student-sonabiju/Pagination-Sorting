@@ -1,0 +1,16 @@
+meta {
+  name: slice
+  type: http
+  seq: 3
+}
+
+get {
+  url: /api/products/slice?page=0&size=10
+  body: none
+  auth: inherit
+}
+
+params:query {
+  page: 0
+  size: 10
+}
